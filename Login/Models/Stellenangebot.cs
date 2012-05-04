@@ -11,19 +11,35 @@ namespace Login.Models
     /// <summary>
     /// Die Klasse Stellenangebote repräsentiert die Tabelle "Stellenangebote" in der Datenbank
     /// </summary>
-    public class Stellenangebote
+    public class Stellenangebot
     {
 
         public int id { get; set; }
 
-        //---------------Veranstalter relevant--------------------------------------
+        //---------------Grunddaten Stellenangebot--------------------------------------
 
         [Required]
         [StringLength(50)]
         public string stelllenName { get; set; }
 
+        [StringLength(50)]
+        public string ort { get; set; }
+
         [Required]
         public string beschreibung { get; set; }
+
+        public string vorraussetzungen { get; set; }
+
+        [Required]
+        [Integer]
+        public int monatsStunden { get; set; }
+
+        [Required]
+        [Integer]
+        public int anzahlOffeneStellen { get; set; }
+        
+
+        //---------------Veranstalter Daten--------------------------------------
 
         [Required]
         [StringLength(50)]
@@ -33,7 +49,7 @@ namespace Login.Models
         [StringLength(50)]
         public string anbieter { get; set; }
 
-        //---------------Veranstalter relevant--------------------------------------
+        //---------------Zeitangaben--------------------------------------
 
         [Required]
         public  Date startAnstellung { get; set; }
@@ -44,17 +60,12 @@ namespace Login.Models
         [Required]
         public Date bewerbungsFrist { get; set; }
 
-        [Required]
-        [Integer]
-        public int monatsStunden { get; set; }
+        
 
-        [Required]
-        [Integer]
-        public int anzahlOffeneStellen { get; set; }
+        
 
-        [StringLength(50)]
-        public string ort { get; set; }
+        
 
-        public string vorraussetzungen { get; set; }
+        
     }
 }
