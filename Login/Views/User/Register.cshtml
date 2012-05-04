@@ -1,4 +1,4 @@
-﻿@model Login.Models.Benutzer
+﻿@model Login.Models.Register
 
 @{
     ViewBag.Title = "Index";
@@ -151,13 +151,13 @@
 
                 <div class="input">
                     @Html.LabelFor(model => model.passwort)
-                    @Html.PasswordFor(model => model.passwort)
+                    @Html.EditorFor(model => model.passwort)
                     @Html.ValidationMessageFor(model => model.passwort)
                 </div>
 
                 <div class="input">
                     @Html.LabelFor(model => model.confirmPasswort)
-                    @Html.PasswordFor(model => model.confirmPasswort)
+                    @Html.EditorFor(model => model.confirmPasswort)
                     @Html.ValidationMessageFor(model => model.confirmPasswort)
                 </div>
             </div>

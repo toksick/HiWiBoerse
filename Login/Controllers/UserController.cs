@@ -9,64 +9,41 @@ using System.Data.SqlClient;
 
 namespace Login.Controllers
 {
-    /// <summary>
-    /// Der User Controller verwaltet die Registrierung, den Login und die Kontodatenänderungen
-    /// </summary>
     public class UserController : Controller
     {
         Benutzer user;
-        DBManager DB = DBManager.getInstanz();
-
-
-
-        /// <summary>
-        /// Ruft die Hauptseite mit login Bereich auf
-        /// </summary>
-        /// <returns>Index.cshtml</returns>
+        DBManager DB = DBManager.getInstance();
+        //Methode Für die Standart View
         public ActionResult Index()
         {
             return View();
         }
 
-
-        /// <summary>
-        /// zeigt das Registrierungsformular an
-        /// </summary>
-        /// <returns>Register.cshtml</returns>
+        //Benutzer registrieren
         public ActionResult Register()
         {
-            var model = new Benutzer();
+            var model = new Register();
             return View(model);
         }
 
-        /// <summary>
-        /// fügt einen Benutzer der Datenbank hinzu und startet eine Session.
-        /// öffnet die Hauptseite
-        /// </summary>
-        /// <param name="model">Register model</param>
-        /// <returns>Index.cshtml</returns>
         [HttpPost]
-        public ActionResult Register(Benutzer model)
+        public ActionResult Register(Register model)
         {
             string passwort = FormsAuthentication.HashPasswordForStoringInConfigFile(model.passwort, "SHA1");
             DB.aendern("INSERT INTO " +
                             "Benutzer " +
-                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreterID) " +
+                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreter) " +
                             "VALUES " +
                                 "(" +
                                     "'" + model.vorname + "', '" + model.nachname + "', '" + model.email + "', '" + model.studiengang + "', " + model.fachsemester + ", '" + model.strasse + "', '" + model.hausnummer + "', '" + model.wohnort + "', " +
                                     model.plz + ", '" + passwort + "', 0, 1, " + model.matrikelnummer + ", '" + model.institut + "', 12)");
-            FormsAuthentication.SetAuthCookie(user.email, false); 
+
             return RedirectToAction("Index");
 
         }
 
-
-        /// <summary>
-        /// ruft die Kontodaten des eingeloggten Benutzers ab und gibt sie auf der
-        /// Kontoseite zurück
-        /// </summary>
-        /// <returns>Konto.cshtml</returns>
+        //Konto Daten einsehen
+        //Pre: User muss eingeloggt sein
         [Authorize]
         public ActionResult Konto()
         {
@@ -92,12 +69,10 @@ namespace Login.Controllers
         }
 
 
-        /// <summary>
-        /// zeigt das Kontoformular an auf der die Benutzerdaten verändert werden können
-        /// </summary>
-        /// <returns>KontoBearbeiten.cshtml</returns>
+        //Konto EditFormular anzeigen
+        //Pre: User muss eingeloggt sein
         [Authorize]
-        public ActionResult KontoBearbeiten()
+        public ActionResult KontoEdit()
         {
             this.user = new Benutzer();
             user.email = HttpContext.User.Identity.Name;
@@ -120,15 +95,10 @@ namespace Login.Controllers
             return View(user);
         }
 
-        /// <summary>
-        /// Übernimmt die vom Benutzer in die KontoBearbeiten Seite eingetragenen Änderungen
-        /// in die Datenbank und leitet den Benutzer auf die Konto Seite weiter
-        /// </summary>
-        /// <param name="user">Benutzer model</param>
-        /// <returns>Konto.cshtml</returns>
+        //Bearbeite das UserKonto
         [HttpPost]
         [Authorize]
-        public ActionResult KontoBearbeiten(Benutzer user)
+        public ActionResult KontoEdit(Benutzer user)
         {
             user.email = HttpContext.User.Identity.Name;
 
@@ -149,12 +119,7 @@ namespace Login.Controllers
             return RedirectToAction("Konto");
         }
 
-        /// <summary>
-        /// Gleicht die vom Benutzer in das Loginfeld eingegebenen Daten mit der 
-        /// Datenbank ab, und setzt das AuthCookie falls Passwort und Email richtig sind.
-        /// </summary>
-        /// <param name="user">Login model</param>
-        /// <returns>Index.cshtml</returns>
+        //Login Methode 
         [HttpPost]
         public ActionResult Login(Login.Models.Login user)
         {
@@ -190,10 +155,7 @@ namespace Login.Controllers
         }
 
 
-        /// <summary>
-        /// Meldet den Benutzer ab indem das AuthCookie gelöscht wird
-        /// </summary>
-        /// <returns>Index.cshtml</returns>
+        //Logout Methode
         [Authorize]
         public ActionResult Logout()
         {
@@ -202,12 +164,10 @@ namespace Login.Controllers
         }
 
 
-        /// <summary>
-        /// Speichert den Benutzer in die Datenbank
-        /// </summary>
-        /// <param name="user">Register model</param>
-        /// <returns>Boolean erfolgreich</returns>
-        private bool benutzerSpeichern(Benutzer user)
+        /**
+         * speichert den übergebenen Benutzer in der Datenbank
+         */
+        private bool SaveUserToDB(Register user)
         {
             string query = "INSERT INTO " +
                                 "Benutzer " +
@@ -226,7 +186,7 @@ namespace Login.Controllers
                                         "freischaltung, " +
                                         "matrikelnummer, " +
                                         "institut, " +
-                                        "stellvertreterID" +
+                                        "stellvertreter" +
                                     ") " +
                                 "VALUES " +
                                     "(" +
@@ -244,14 +204,13 @@ namespace Login.Controllers
                                         user.freischaltung + ", " +
                                         user.matrikelnummer + ", " +
                                         "'" + user.institut + "', " +
-                                        user.stellvertreterID +
+                                        user.stellvertreter +
                                     ")";
             
             DB.aendern(query);
             return true;
         }
 
-        //TODO
         private bool GetUserByEmail(string email)
         {
             return true;
