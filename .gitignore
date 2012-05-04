@@ -2,6 +2,8 @@
 bin
 obj
 Login/App_Data
+Login/bin
+Login/obj
 
 # mstest test results
 TestResults
