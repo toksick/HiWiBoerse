@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Login.Models
 {
+    //Test
     /// <summary>
     /// Die Klasse Bewerbung beschreibt eine Hiwi Bewerbung für ein Stellenangebot. 
     /// Dabei werden die Benutzerdaten mit einem Stellenangebot verknüpft.

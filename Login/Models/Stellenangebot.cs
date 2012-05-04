@@ -7,7 +7,7 @@ using DataAnnotationsExtensions;
 
 namespace Login.Models
 {
-
+    //Test
     /// <summary>
     /// Die Klasse Stellenangebote repräsentiert die Tabelle "Stellenangebote" in der Datenbank
     /// </summary>
