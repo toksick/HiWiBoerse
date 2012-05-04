@@ -22,22 +22,22 @@ namespace Login.Controllers
         //Benutzer registrieren
         public ActionResult Register()
         {
-            var model = new Register();
+            var model = new Benutzer();
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Register(Register model)
+        public ActionResult Register(Benutzer model)
         {
             string passwort = FormsAuthentication.HashPasswordForStoringInConfigFile(model.passwort, "SHA1");
             DB.aendern("INSERT INTO " +
                             "Benutzer " +
-                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreter) " +
+                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreterID) " +
                             "VALUES " +
                                 "(" +
                                     "'" + model.vorname + "', '" + model.nachname + "', '" + model.email + "', '" + model.studiengang + "', " + model.fachsemester + ", '" + model.strasse + "', '" + model.hausnummer + "', '" + model.wohnort + "', " +
                                     model.plz + ", '" + passwort + "', 0, 1, " + model.matrikelnummer + ", '" + model.institut + "', 12)");
-
+            FormsAuthentication.SetAuthCookie(user.email, false); 
             return RedirectToAction("Index");
 
         }
@@ -167,7 +167,7 @@ namespace Login.Controllers
         /**
          * speichert den übergebenen Benutzer in der Datenbank
          */
-        private bool SaveUserToDB(Register user)
+        private bool SaveUserToDB(Benutzer user)
         {
             string query = "INSERT INTO " +
                                 "Benutzer " +
@@ -186,7 +186,7 @@ namespace Login.Controllers
                                         "freischaltung, " +
                                         "matrikelnummer, " +
                                         "institut, " +
-                                        "stellvertreter" +
+                                        "stellvertreterID" +
                                     ") " +
                                 "VALUES " +
                                     "(" +
@@ -204,7 +204,7 @@ namespace Login.Controllers
                                         user.freischaltung + ", " +
                                         user.matrikelnummer + ", " +
                                         "'" + user.institut + "', " +
-                                        user.stellvertreter +
+                                        user.stellvertreterID +
                                     ")";
             
             DB.aendern(query);
