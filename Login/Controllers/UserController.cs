@@ -12,38 +12,53 @@ namespace Login.Controllers
     public class UserController : Controller
     {
         Benutzer user;
-        DBManager DB = DBManager.getInstance();
-        //Methode Für die Standart View
+        DBManager DB = DBManager.getInstanz();
+
+
+        /**
+         * Default View /User
+         */ 
         public ActionResult Index()
         {
             return View();
         }
 
-        //Benutzer registrieren
+
+        /**
+         * öffnet Registrierung View
+         */
         public ActionResult Register()
         {
-            var model = new Register();
+            var model = new Benutzer();
             return View(model);
         }
 
+
+        /** 
+         * fügt einen Benutzer der Datenbank hinzu und startet eine Session
+         * öffne Default Startseite
+         * kann nur von eingeloggten Benutzern aufgerufen werden
+         */
         [HttpPost]
-        public ActionResult Register(Register model)
+        public ActionResult Register(Benutzer model)
         {
             string passwort = FormsAuthentication.HashPasswordForStoringInConfigFile(model.passwort, "SHA1");
             DB.aendern("INSERT INTO " +
                             "Benutzer " +
-                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreter) " +
+                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreterID) " +
                             "VALUES " +
                                 "(" +
                                     "'" + model.vorname + "', '" + model.nachname + "', '" + model.email + "', '" + model.studiengang + "', " + model.fachsemester + ", '" + model.strasse + "', '" + model.hausnummer + "', '" + model.wohnort + "', " +
                                     model.plz + ", '" + passwort + "', 0, 1, " + model.matrikelnummer + ", '" + model.institut + "', 12)");
-
+            FormsAuthentication.SetAuthCookie(user.email, false); 
             return RedirectToAction("Index");
 
         }
 
-        //Konto Daten einsehen
-        //Pre: User muss eingeloggt sein
+
+        /**
+         * Konto Daten des Bentuzers aus Datenbank lesen und diese an die Kontoview übergeben
+         */
         [Authorize]
         public ActionResult Konto()
         {
@@ -167,7 +182,7 @@ namespace Login.Controllers
         /**
          * speichert den übergebenen Benutzer in der Datenbank
          */
-        private bool SaveUserToDB(Register user)
+        private bool SaveUserToDB(Benutzer user)
         {
             string query = "INSERT INTO " +
                                 "Benutzer " +
@@ -186,7 +201,7 @@ namespace Login.Controllers
                                         "freischaltung, " +
                                         "matrikelnummer, " +
                                         "institut, " +
-                                        "stellvertreter" +
+                                        "stellvertreterID" +
                                     ") " +
                                 "VALUES " +
                                     "(" +
@@ -204,7 +219,7 @@ namespace Login.Controllers
                                         user.freischaltung + ", " +
                                         user.matrikelnummer + ", " +
                                         "'" + user.institut + "', " +
-                                        user.stellvertreter +
+                                        user.stellvertreterID +
                                     ")";
             
             DB.aendern(query);
