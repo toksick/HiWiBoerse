@@ -18,6 +18,7 @@ namespace Login.Controllers
         DBManager DB = DBManager.getInstanz();
 
 
+
         /// <summary>
         /// Ruft die Hauptseite mit login Bereich auf
         /// </summary>
@@ -34,7 +35,7 @@ namespace Login.Controllers
         /// <returns>Register.cshtml</returns>
         public ActionResult Register()
         {
-            var model = new Register();
+            var model = new Benutzer();
             return View(model);
         }
 
@@ -45,17 +46,17 @@ namespace Login.Controllers
         /// <param name="model">Register model</param>
         /// <returns>Index.cshtml</returns>
         [HttpPost]
-        public ActionResult Register(Register model)
+        public ActionResult Register(Benutzer model)
         {
             string passwort = FormsAuthentication.HashPasswordForStoringInConfigFile(model.passwort, "SHA1");
             DB.aendern("INSERT INTO " +
                             "Benutzer " +
-                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreter) " +
+                                "( vorname, nachname, email, studiengang, fachsemester, strasse, hausnummer, wohnort, plz, passwort, rechte, freischaltung, matrikelnummer, institut, stellvertreterID) " +
                             "VALUES " +
                                 "(" +
                                     "'" + model.vorname + "', '" + model.nachname + "', '" + model.email + "', '" + model.studiengang + "', " + model.fachsemester + ", '" + model.strasse + "', '" + model.hausnummer + "', '" + model.wohnort + "', " +
                                     model.plz + ", '" + passwort + "', 0, 1, " + model.matrikelnummer + ", '" + model.institut + "', 12)");
-
+            FormsAuthentication.SetAuthCookie(user.email, false); 
             return RedirectToAction("Index");
 
         }
@@ -206,7 +207,7 @@ namespace Login.Controllers
         /// </summary>
         /// <param name="user">Register model</param>
         /// <returns>Boolean erfolgreich</returns>
-        private bool benutzerSpeichern(Register user)
+        private bool benutzerSpeichern(Benutzer user)
         {
             string query = "INSERT INTO " +
                                 "Benutzer " +
@@ -225,7 +226,7 @@ namespace Login.Controllers
                                         "freischaltung, " +
                                         "matrikelnummer, " +
                                         "institut, " +
-                                        "stellvertreter" +
+                                        "stellvertreterID" +
                                     ") " +
                                 "VALUES " +
                                     "(" +
@@ -243,7 +244,7 @@ namespace Login.Controllers
                                         user.freischaltung + ", " +
                                         user.matrikelnummer + ", " +
                                         "'" + user.institut + "', " +
-                                        user.stellvertreter +
+                                        user.stellvertreterID +
                                     ")";
             
             DB.aendern(query);
