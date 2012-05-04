@@ -77,7 +77,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Benutzer.cs" />
-    <Compile Include="Models\Register.cs" />
+    <Compile Include="Models\Date.cs" />
+    <Compile Include="Models\Stellenangebote.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\DBManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -175,7 +176,7 @@
     <Content Include="Views\User\Register.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\User\KontoEdit.cshtml" />
+    <Content Include="Views\User\KontoBearbeiten.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
