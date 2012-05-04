@@ -12,20 +12,33 @@ namespace Login.Controllers
     public class UserController : Controller
     {
         Benutzer user;
-        DBManager DB = DBManager.getInstance();
-        //Methode Für die Standart View
+        DBManager DB = DBManager.getInstanz();
+
+
+        /**
+         * Default View /User
+         */ 
         public ActionResult Index()
         {
             return View();
         }
 
-        //Benutzer registrieren
+
+        /**
+         * öffnet Registrierung View
+         */
         public ActionResult Register()
         {
             var model = new Register();
             return View(model);
         }
 
+
+        /** 
+         * fügt einen Benutzer der Datenbank hinzu und startet eine Session
+         * öffne Default Startseite
+         * kann nur von eingeloggten Benutzern aufgerufen werden
+         */
         [HttpPost]
         public ActionResult Register(Register model)
         {
@@ -42,8 +55,10 @@ namespace Login.Controllers
 
         }
 
-        //Konto Daten einsehen
-        //Pre: User muss eingeloggt sein
+
+        /**
+         * Konto Daten des Bentuzers aus Datenbank lesen und diese an die Kontoview übergeben
+         */
         [Authorize]
         public ActionResult Konto()
         {
